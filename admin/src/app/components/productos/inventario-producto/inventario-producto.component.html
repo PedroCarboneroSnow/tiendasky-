@@ -1,0 +1,140 @@
+<app-sidebar></app-sidebar>
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+    <h1 class="mt-2 mt-md-4 mb-3 pt-5">Productos</h1>
+    <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+        <p class="text-muted">Este módulo lista todos los productos de la tienda.</p>
+        <p class="font-size-sm font-weight-medium pl-md-4">
+            <a class="btn btn-dark" [routerLink]="['/panel/productos/']"><i class='text-white cxi-arrow-left'></i> Regresar</a>
+        </p>
+    </div>
+</div>
+
+<div class="card box-shadow-sm" *ngIf="producto == undefined">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Inventario de producto</h5>
+    </div>
+    <div class="card-body" *ngIf="producto == undefined">
+        <h3 class="text-center">No se encontro el producto.</h3>
+        <div class="row">
+          <div class="col-3 mx-auto">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/4319/4319124.png" alt="" style="width: 100%; ">
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="card box-shadow-sm" *ngIf="producto">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Inventario de {{producto.titulo}}</h5>
+    </div>
+    <div class="card-header">
+        <form #inventarioForm="ngForm" (ngSubmit)="registro_inventario(inventarioForm)">
+        <div class="row">
+                <div class="col-md-4 mb-3">
+                <label for="validationCustom01" class="form-label">Cantidad</label>
+                <input class="form-control" type="number" id="cantidad" name="cantidad" [(ngModel)]="add_inventario.cantidad" placeholder="Cantidad"  required>
+                </div>
+                <div class="col-md-4 mb-3">
+                <label for="validationCustom02" class="form-label">Proveedor</label>
+                <input class="form-control" type="text" name="proveedor"  [(ngModel)]="add_inventario.proveedor" placeholder="Proveedor"  required>
+                </div>
+                <div class="col-md-4 mb-3 d-flex flex-column justify-content-end">
+                    <button class="btn btn-warning" type="submit">Ingresar</button>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-success" type="button" (click)="dowload_excel()"><i class="far fa-file-excel"></i></button>
+            </div>
+        </div>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Admin</th>
+                        <th>Cantidad</th>
+                        <th>Proveedor</th>
+                        <th>Opciones</th>
+                    </tr>
+                    </thead>
+                    
+                    <ng-container *ngIf="inventario.length == 0">
+                        <tbody>
+                            <tr>
+                                <td class="text-center" colspan="4">
+                                    <!-- Custom size border spinner -->
+                                    <span class="text-muted">No hay registro de inventario</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+
+                    <tbody *ngIf="load_data">
+                        <tr>
+                            <td class="text-center" colspan="4">
+                                <!-- Custom size border spinner -->
+                                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-container *ngIf="!load_data">
+                        <tbody *ngFor="let item of inventario| slice: (page-1)*pageSize : (page-1) * pageSize + pageSize; let indice = index">
+                            <tr>
+                                <td>{{item.admin.nombres}} {{item.admin.apellidos}}</td>
+                                <td>{{item.cantidad}}</td>
+                                <td>{{item.proveedor}}</td>
+                                <td>
+                                    
+                                    <a style="cursor: pointer;" data-toggle="modal" [attr.data-target]="'#delete-'+item._id" class="dropdown-item"><i class='text-danger far fa-trash-alt'></i></a>
+    
+                                    <div class="modal fade" id="delete-{{item._id}}" tabindex="-1" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h4 class="modal-title">Eliminar </h4>
+                                              <button class="close cxi-cross" type="button" data-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <div class="row">
+                                                    <p class="fs-sm ">¿Desea eliminar el inventario?</p>
+                                                </div>
+                                              
+                                              
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                                              <button *ngIf="!load_btn" class="btn btn-danger btn-sm" (click)="eliminar(item._id)" type="button">Si, eliminar</button>
+                                              <button *ngIf="load_btn" type="button" class="btn btn-secondary" disabled>
+                                                <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true" ></span>
+                                                Eliminando...
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                    
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card-footer">
+        <ngb-pagination
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="inventario.length"
+        ></ngb-pagination>
+    </div>
+</div>

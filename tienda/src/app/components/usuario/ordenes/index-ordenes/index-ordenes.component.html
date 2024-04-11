@@ -1,0 +1,79 @@
+<app-nav></app-nav>
+
+<main class="cs-page-wrapper">
+    <!-- Breadcrumb -->
+    <nav class="bg-secondary mb-3" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb breadcrumb-alt mb-0">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']" routerLinkActive="active"><i class="cxi-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active" [routerLink]="['/cuenta/perfil']" style="cursor: pointer;"
+                    aria-current="page">Mi Perfil</li>
+                <li class="breadcrumb-item active" aria-current="page">Mis ordenes</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Page container -->
+    <section class="container pt-3 pt-lg-4 pb-5 pb-lg-6">
+        <div class="row pb-2 pb-lg-0">
+
+            <!-- Account menu (sticky sidebar) -->
+            <aside class="col-xl-3 col-lg-4 pb-3 mb-4 mb-lg-0">
+                <app-sidebar></app-sidebar>
+            </aside>
+
+            <!-- Content -->
+            <div class="col-lg-8 ml-auto">
+                <div class="d-flex align-items-center justify-content-between mb-4 pb-sm-2">
+                    <h1 class="h2 mb-0">Mis órdenes</h1>
+                </div>
+
+                <ng-container *ngIf="ordenes.length >= 1">
+                    <div *ngIf="!load_data">
+                        <div class="card border-bottom" *ngFor="let item of ordenes | slice: (page-1)*pageSize : (page-1) * pageSize + pageSize">
+                            <div class="card-header accordion-heading py-1">
+                                <a [routerLink]="['/cuenta/ordenes',item._id]" class="d-flex flex-wrap justify-content-between py-3" style="text-decoration: none;">
+                                    <span class="pr-2"># {{item._id.toUpperCase()}}</span>
+                                    <span class="font-size-sm text-muted text-nowrap px-2">
+                                        <i class="cxi-clock font-size-base align-middle mt-n1 mr-1"></i>
+                                        {{item.createAt|date}}
+                                    </span>
+                                    <span class="badge badge-info">{{item.estado}}</span>
+                                    <span class="text-dark pl-1">S/ {{item.subtotal}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="ordenes.length == 0">
+                    <div class="card border-bottom">
+                        <div class="card-header accordion-heading py-1">
+                            <div class=" flex-wrap justify-content-between py-3 text-center text-primary">
+                               <strong>No tienes una orden en tu cuenta 😥</strong>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div class="row" *ngIf="load_data">
+                    <div class="col-12 text-center">
+                        <!-- Success spinner -->
+                        <div class="spinner-grow text-success" role="status">
+                        </div>
+                    </div>
+                </div>
+               
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <ngb-pagination  class="ml-auto" [(page)]="page" [pageSize]="pageSize" [collectionSize]="ordenes.length"></ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,73 @@
+<app-sidebar></app-sidebar>
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+    <h1 class="mt-2 mt-md-4 mb-3 pt-5">Mensajes</h1>
+    <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+        <p class="text-muted">Este módulo lista todos los mensajes de la tienda.</p>
+        
+    </div>
+</div>
+
+<div class="card box-shadow-sm">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Mensajes de la tienda</h5>
+    </div>
+   
+    <div class="card-body" *ngIf="load_data">
+        <!-- Success spinner -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <div  class="spinner-grow text-success" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  *ngIf="!load_data" class="card-body">
+        <!-- Product review -->
+        <div class="mb-4 pb-4 border-bottom" *ngFor="let item of mensajes | slice: (page-1)*pageSize : (page-1) * pageSize + pageSize; let indice = index">
+            <div class="row">
+                <div class="col-md-3 col-sm-4 mb-sm-0 mb-3">
+                    <h3 class="mb-2 font-size-lg">{{item.cliente}}</h3>
+                    <span class="d-block mb-3 font-size-sm text-muted">{{item.createAt|date}}</span>
+                    <span *ngIf="item.estado == 'Abierto'" class="badge badge-primary">Abierto</span>
+                    <span *ngIf="item.estado == 'Cerrado'" class="badge badge-danger">Cerrado</span>
+                </div>
+                <div class="col">
+                    <p class="mb-3">
+                        <a class="me-1 fw-bold text-decoration-none">{{item.correo}}</a>
+                        {{item.mensaje}}
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <a class="nav-link p-0 font-size-sm" data-toggle="modal" [attr.data-target]="'#estadoModal-'+item._id">
+                            <i class="cxi-close-round text-danger me-2 font-size-base align-middle mt-n1"></i>
+                            Cerrar mensaje
+                        </a>
+                        
+
+                        <div class="modal fade" id="estadoModal-{{item._id}}" tabindex="-1" style="display: none;" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Eliminar el mensaje</h4>
+                                  <button class="close cxi-cross" type="button" data-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <p class="fs-sm">¿Desea cerrar el mensaje?</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                                  <button class="btn btn-danger btn-sm" (click)="cerrar(item._id)" type="button">Si, cerrar</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="mensajes.length"></ngb-pagination>
+    </div>
+</div>

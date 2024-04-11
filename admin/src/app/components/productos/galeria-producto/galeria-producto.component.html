@@ -1,0 +1,138 @@
+<app-sidebar></app-sidebar>
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+    <h1 class="mt-2 mt-md-4 mb-3 pt-5">Productos</h1>
+    <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+        <p class="text-muted">Este módulo se se muestran la galeria del producto.</p>
+        <p class="font-size-sm font-weight-medium pl-md-4">
+            <a class="btn btn-dark" [routerLink]="['/panel/productos/']"><i class='text-white cxi-arrow-left'></i>
+                Regresar</a>
+        </p>
+    </div>
+</div>
+<div class="card box-shadow-sm">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Galeria</h5>
+    </div>
+
+
+    <div class="card-body">
+        <div style="max-width: 48rem;">
+
+            <div class="row mb-5">
+
+                <div class="col-md-4" style="padding-right: 0px;">
+                    <!-- Caption in the center -->
+                    <img [src]="url + 'obtener_portada/'+producto.portada" class="img-thumbnail" alt="...">
+                    <!-- <figcaption class="figure-caption text-center">{{this.producto.titulo}}</figcaption> -->
+                </div>
+                <div style="padding-left: 0px;" class="col-md-8">
+                    <div class="card" style="height: 100% !important; background: #f5eeee;">
+                        <div class="card-body">
+                            <h3 class="card-product-title text-truncate mb-2">
+                                <a class="nav-link mb-3">{{this.producto.titulo}}</a>
+                                <p class="text-muted mt-3">{{this.producto.descripcion}}</p>
+                                <div class="d-flex align-items-center">
+                                    <span class="h5 d-inline-block mb-0 text-danger">${{this.producto.precio}}</span>
+                                </div>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row align-items-center">
+                <label class="col-md-3 col-form-label font-weight-medium" for="text-input">Nueva imagen</label>
+                <div class="col-md-6">
+                    <input id="input-img" class="form-control" (change)="fileChangeEvent($event)" type="file">
+                </div>
+                <div class="col-md-3">
+                    <ng-container *ngIf="file!= undefined">
+                        <button style="cursor: pointer;" (click)="subir_imagen()" class=" btn btn-warning">Subir
+                            imagen</button>
+                        <button *ngIf="load_btn" type="button" class="btn btn-warning" disabled>
+                            <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+                            Subiendo...
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="file == undefined">
+                        <button style="cursor: pointer;" class=" btn btn-warning" disabled>Subir imagen</button>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="form-group row align-items-center">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm" *ngIf="producto.galeria">
+                            <thead class="thead-dark">
+                                <tr>
+
+                                    <th>Titulo</th>
+                                    <th>Eliminar</th>
+
+                                </tr>
+                            </thead>
+                            <ng-container *ngIf="producto.galeria.length == 0">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="text-center"><span class="text-muted">No hay
+                                                imagenes disponibles disponibles :(</span></td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+                            <ng-container *ngIf="producto.galeria.length >= 1">
+                                <tbody *ngFor="let item of producto.galeria; let indice = index">
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                <img [src]="url + 'obtener_portada/'+item.image" class="img-thumbnail"
+                                                    style="width: 120px;" alt="...">
+                                            </p>
+                                        </td>
+                                        <td><a style="cursor: pointer;" data-toggle="modal"
+                                                [attr.data-target]="'#delete-'+item._id" class="dropdown-item"><i
+                                                    class='text-danger far fa-trash-alt'></i></a>
+                                        </td>
+                                    </tr>
+                                    
+                                    <div class="modal fade" id="delete-{{item._id}}" tabindex="-1" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Eliminar </h4>
+                                                    <button class="close cxi-cross" type="button" data-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p class="fs-sm">¿Desea eliminar el esta imagen?</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <img class="rounded-circle" style="width: 150px; height: 150px; margin-right: 10px;"
+                                                                [src]="url + 'obtener_portada/'+item.image" class="img-thumbnail" alt="Rounded image" />
+                                                        </div>
+                                                    </div>
+                                    
+                                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                                                    <button *ngIf="!load_btn_eliminar" class="btn btn-danger btn-sm"  (click)="eliminar(item._id)"
+                                                        type="button"> Si, eliminar</button>
+                                                    <button *ngIf="load_btn_eliminar" type="button" class="btn btn-secondary" data-dismiss="modal" disabled>
+                                                        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+                                                        Creando...
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tbody>
+                            </ng-container>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

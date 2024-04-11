@@ -1,0 +1,53 @@
+<br>
+<br>
+<br>
+
+<div class="container-fluid">
+    <div class="row main-content bg-success text-center">
+        <div class="col-md-6 text-center company__info">
+            <img src="https://i.ibb.co/3SK2fdr/Recurso-3logovert.png" alt="Recurso-3logovert">
+        </div>
+        <div class="col-md-6 col-xs-12 col-sm-12 login_form ">
+            <div class="container-fluid">
+                <div class="row">
+                    <h3 class="modal-title mt-4 mb-0 text-center mb-5">Iniciar sesión</h3>
+
+                    <p class="font-size-sm text-muted text-center">Inicia sesión en tu cuenta usando el correo
+                        electrónico y la
+                        contraseña.</p>
+                </div>
+                <div class="row">
+                    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="needs-validation" novalidate="">
+                        <div class="row">
+                            <label for="signin-email">
+                                Correo electrónico</label>
+                            <input type="email" class="form__input" name="email" [(ngModel)]="user.email"
+                                placeholder="Tu dirección de correo electrónico" required="">
+
+                        </div>
+                        <div class="row">
+                            <label for="signin-password" class="form-label">Contraseña</label>
+                            <div class="cs-password-toggle input-group-overlay">
+                                <input id="signin-password" type="password" class="form__input appended-form-control"
+                                    name="password" [(ngModel)]="user.password" placeholder="Tu contraseña" required="">
+                                    <div class="input-group-append-overlay">
+                                        <a type="button" id="show_password" style="display: flex;
+                                align-items: center;
+                                justify-content: center;" (click)="mostrarPassword()" class=""><i
+                                                class="cxi-eye icon mr-4 ml-3"></i></a>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

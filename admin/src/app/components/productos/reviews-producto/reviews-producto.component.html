@@ -1,0 +1,101 @@
+<app-sidebar></app-sidebar>
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+    <h1 class="mt-2 mt-md-4 mb-3 pt-5">Productos</h1>
+    <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+        <p class="text-muted">Este módulo lista todos las reseñas de la tienda.</p>
+        <p class="font-size-sm font-weight-medium pl-md-4">
+            <a class="btn btn-dark" [routerLink]="['/panel/productos/']"><i class='text-white cxi-arrow-left'></i>
+                Regresar</a>
+        </p>
+    </div>
+</div>
+
+<div class="card box-shadow-sm" *ngIf="producto == undefined">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Inventario de producto</h5>
+    </div>
+    <div class="card-body" *ngIf="producto == undefined">
+        <h3 class="text-center">No se encontro el producto.</h3>
+        <div class="row">
+            <div class="col-3 mx-auto">
+
+                <img src="https://cdn-icons-png.flaticon.com/512/4319/4319124.png" alt="" style="width: 100%; ">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card box-shadow-sm" *ngIf="producto">
+    <div class="card-header">
+        <h5 style="margin-bottom: 0px;">Reseñas de {{producto.titulo}}</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-5">
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-md-4" style="padding-right: 0px;">
+                        <div class="card" style="height: 100%;">
+                            <!-- Caption in the center -->
+                            <img [src]="url + 'obtener_portada/'+producto.portada" alt="...">
+                            <!-- <figcaption class="figure-caption text-center">{{this.producto.titulo}}</figcaption> -->
+                        </div>
+                    </div>
+                    <div style="padding-left: 0px;" class="col-md-8">
+                        <div class="card" style="height: 100% !important; background: #f5eeee;">
+                            <div class="card-body">
+                                <h3 class="card-product-title mb-2">
+                                    <a class="nav-link mb-3">{{this.producto.titulo}}</a>
+                                    <p class="text-muted mt-3">{{this.producto.descripcxion}}</p>
+                                    <div class="d-flex align-items-center">
+                                        <span
+                                            class="h5 d-inline-block mb-0 text-danger">${{this.producto.precio}}</span>
+                                    </div>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product review -->
+        <ng-container  *ngIf="reviews.length >= 1">
+            <div class="mb-4 pb-4 border-bottom" *ngFor="let item of reviews | slice: (page-1)*pageSize :(page-1) * pageSize + pageSize">
+                <div class="row" >
+                    <div class="col-md-3 col-sm-4 mb-sm-0 mb-3">
+                        <h3 class="mb-2 font-size-lg">{{item.cliente.nombres}} {{item.cliente.apellidos}}</h3>
+                        <span class="d-block mb-3 font-size-sm text-muted">{{item.createAt |date}}</span>
+                        <div class="mt-n1 star-rating">
+                            <i class="sr-star cxi-star-filled active" [ngClass]="{'active': item.estrellas >=1}"></i>
+                            <i class="sr-star cxi-star-filled active" [ngClass]="{'active': item.estrellas >=2}"></i>
+                            <i class="sr-star cxi-star-filled active" [ngClass]="{'active': item.estrellas >=3}"></i>
+                            <i class="sr-star cxi-star-filled active" [ngClass]="{'active': item.estrellas >=4}"></i>
+                            <i class="sr-star cxi-star-filled active" [ngClass]="{'active': item.estrellas >=5}"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p class="mb-3">
+                            <a class="me-1 font-weight-bold text-decoration-none" >{{item.cliente.email}}</a>
+                            {{item.review}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        
+
+        <div class="row" *ngIf="reviews.length == 0">
+           <div class="col-md-12">
+            <p class="me-1 font-weight-bold text-decoration-none text-dark">
+                No hay reseñas para el producto 😢
+            </p>
+           </div>
+        </div>
+    </div>
+
+
+    <div class="card-footer">
+        <ngb-pagination  [(page)]="page" [pageSize]="pageSize" [collectionSize]="reviews.length"></ngb-pagination>
+    </div>
+</div>

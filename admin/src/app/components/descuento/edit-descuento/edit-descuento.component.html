@@ -1,0 +1,106 @@
+<app-sidebar></app-sidebar>
+
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+    <h1 class="mt-2 mt-md-4 mb-3 pt-5">Descuentos</h1>
+    <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+        <p class="text-muted">Este módulo lista todos los descuentos de la tienda.</p>
+
+    </div>
+</div>
+
+<form #actualizarForm="ngForm" (ngSubmit)="actualizar(actualizarForm)">
+    <div class="card box-shadow-sm">
+        <div class="card-header">
+            <h5 style="margin-bottom: 0px;">Actualización de descuento</h5>
+        </div>
+        <div class="card-body">
+
+            <ng-container *ngIf="load_data">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <!-- Custom size border spinner -->
+                            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!load_data">
+                <div class="card-body" *ngIf="descuentos != undefined">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-12 form-group">
+                                    <label for="">Titulo de producto</label>
+                                    <input type="text" class="form-control" placeholder="Titulo de descuento" name="titulo"
+                                        [(ngModel)]="descuentos.titulo" required>
+                                </div>
+                                <div class="col-lg-4 form-group input-group-overlay" >
+                                    <label for="">Fecha de inicio</label>
+                                    <input type="date" class="form-control" placeholder="100%" name="fecha_inicio"
+                                        [(ngModel)]="descuentos.fecha_inicio" required>
+                                </div>
+                                <div class="col-lg-4 form-group input-group-overlay" >
+                                    <label for="">Fecha de fin</label>
+                                    <input type="date" class="form-control" placeholder="100%" name="fecha_fin"
+                                        [(ngModel)]="descuentos.fecha_fin" required>
+                                </div>
+                                <div class="col-lg-4 form-group input-group-overlay" >
+                                    <label for="">Descuento</label>
+                                    <input type="text" class="form-control" placeholder="100%" name="descuento"
+                                        [(ngModel)]="descuentos.descuento" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12 form-group">
+                                    <label for="">Banner</label>
+                                    <div class="custom-file">
+                                        <input class="custom-file-input" type="file" value="Hola" id="file-input"
+                                            (change)="fileChangeEvent($event)" required>
+
+                                        <label class="custom-file-label" id="input-portada"
+                                            style="white-space: nowrap; overflow: hidden;" for="file-input">Seleccionar
+                                            imagen</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <img [src]="imgSelect" class="img-thumbnail" alt="Rounded image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body" *ngIf="descuentos == undefined">
+                    <h3 class="text-center">No se encontro el producto.</h3>
+                    <div class="row">
+                        <div class="col-3 mx-auto">
+
+                            <img src="https://cdn-icons-png.flaticon.com/512/4319/4319124.png" alt=""
+                                style="width: 100%; ">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+
+        </div>
+
+        <div class="card-footer">
+            <button *ngIf="!load_btn" class="btn btn-primary mr-3" type="submit"><i class='text-white fas fa-plus'></i>
+                Actualizar descuento</button>
+            <!-- Button with growing spinner and text -->
+            <button *ngIf="load_btn" type="button" class="btn btn-secondary" disabled>
+                <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+                Creando...
+            </button>
+            <a class="btn btn-warning" [routerLink]="['/panel/descuentos']"><i class="text-white cxi-arrow-left"></i>
+                Regresar</a>
+        </div>
+    </div>
+</form>
